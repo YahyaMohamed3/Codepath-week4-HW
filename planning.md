@@ -332,3 +332,89 @@ crucially, how its output is verified rather than trusted blindly.
 
 *(A detailed `## Stretch Feature Plan` section is appended to this document
 after the required features are implemented and before stretch work begins.)*
+
+## Stretch Feature Plan
+
+*This section was added after the required features were implemented and tested,
+and before the stretch features were built, as required by the assignment
+workflow. All four stretch features are planned below.*
+
+### Stretch feature 1 — Ensemble detection (make it explicit)
+
+The three-signal text ensemble already exists as a required feature, but it is
+documented here explicitly as a stretch feature.
+
+- **Plan:** expose all three signal scores individually in the `/submit`
+  response and in the demo result card; document the `50/30/20` weights; handle
+  conflict via the disagreement penalty and the conservative decision gates.
+- **Claude Code use:** already generated in M3/M4. Verify the response exposes
+  each score and that `signal_disagreement` is visible, not hidden.
+- **Tests:** agreeing signals (`test_strong_ai_agreement_*`), conflicting
+  signals (`test_conflicting_signals_*`), penalty cap, and both gates in
+  `tests/test_scoring.py`.
+- **README:** explain what happens when the LLM disagrees with the local
+  signals (disagreement penalty lowers confidence; corroboration gates prevent a
+  lone LLM score from producing `likely_ai`).
+
+### Stretch feature 2 — Provenance certificate
+
+A creator-controlled verification process. It does **not** prove human
+authorship; it verifies that the creator completed a time-limited challenge and
+supplied draft-process evidence.
+
+- **Endpoints:** `POST /certificate/challenge` (creator match, UUID challenge,
+  short random phrase, 10-minute expiry) and `POST /certificate/verify` (creator
+  + content match, unexpired + unused challenge, exact phrase, ≥50-word
+  response, explicit attestation, ≥2 draft-evidence entries).
+- **State rules:** on success, issue a certificate UUID and set status to
+  `verified` *unless* the submission is already `under_review` (never erase an
+  active appeal). Store timestamp + evidence summary; write an audit event.
+- **Module:** `provenance_guard/certificates.py`; new tables
+  `certificate_challenges` and `certificates`; exact certificate label in
+  `labels.py`.
+- **Claude Code use:** generate the challenge/verify service and its
+  transaction. **Manually verify** the "do not erase an active appeal" rule and
+  the single-use challenge guard.
+- **Tests:** `tests/test_certificates.py` — creation, mismatch, expiry,
+  insufficient response, missing evidence, success, reuse rejection, and the
+  appeal-preservation rule.
+
+### Stretch feature 3 — Analytics dashboard
+
+- **Endpoints:** `GET /analytics` (JSON) and `GET /dashboard` (server-rendered
+  HTML with CSS bars — no chart library).
+- **Metrics:** totals, per-type counts, attribution counts + ratios, appeal
+  count + rate (unique appealed submissions / total), average confidence,
+  average signal disagreement, certificate count, under-review count.
+- **Module:** `provenance_guard/analytics.py`; `templates/dashboard.html`.
+- **Claude Code use:** generate the aggregation SQL and template. **Verify**
+  empty-database handling has no division-by-zero.
+- **Tests:** `tests/test_analytics.py` — empty database, distribution, appeal
+  rate, average confidence, certificate count, dashboard render.
+
+### Stretch feature 4 — Multimodal (image metadata)
+
+The second content type is **structured image metadata**, not pixels.
+
+- **Endpoint:** `POST /submit/image-metadata`, returning the same common result
+  schema as text.
+- **Signals (weights `0.50 / 0.25 / 0.25`):** generation-tool marker,
+  metadata-consistency, provenance-history evidence. Editing tools like
+  Photoshop must not imply AI; missing EXIF alone is not proof; stronger process
+  evidence lowers AI likelihood.
+- **Module:** `provenance_guard/detection/image_metadata_signal.py`; reuses the
+  persistence + audit spine via `services.classify_image_metadata`.
+- **Claude Code use:** generate the three signals and the route. **Verify** all
+  three image signals are individually visible and that the pipeline is
+  documented as metadata-only.
+- **Tests:** `tests/test_multimodal.py` — valid metadata, explicit tool marker,
+  stronger provenance, invalid dimensions, individual signals visible, and
+  persistence/audit.
+
+### Note on divergence from the original plan
+
+During implementation the persistence layer moved from a conceptual "structured
+JSON log" to a relational **SQLite** schema, because appeals, analytics,
+certificates, and current statuses all require relational, queryable state
+(unique-appeal counts, status transitions, challenge single-use). This
+divergence is documented in the README spec-reflection section.
