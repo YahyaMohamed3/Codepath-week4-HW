@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Provenance Guard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <h1>Provenance Guard</h1>
+      <p class="tagline">
+        Independent provenance signals for creative writing. Every result is an
+        estimate, not proof. False accusations against human writers are harmful,
+        so the system is deliberately conservative and supports appeals.
+      </p>
+      <nav aria-label="Primary">
+        <a href="/dashboard">Analytics dashboard</a>
+        <a href="/log">Audit log (JSON)</a>
+        <a href="/health">Health (JSON)</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Text submission -->
+    <section aria-labelledby="submit-heading" class="card">
+      <h2 id="submit-heading">Submit text for analysis</h2>
+      <form id="submit-form">
+        <div class="field">
+          <label for="creator-id">Creator ID</label>
+          <input id="creator-id" name="creator_id" type="text"
+                 value="creator-123" required />
+        </div>
+        <div class="field">
+          <label for="text">Writing sample (20–10,000 characters)</label>
+          <textarea id="text" name="text" rows="8" required
+            placeholder="Paste a passage to analyze..."></textarea>
+        </div>
+        <button type="submit">Analyze text</button>
+      </form>
+      <div id="submit-status" class="status" role="status" aria-live="polite"></div>
+      <div id="result" class="result" hidden></div>
+    </section>
+
+    <!-- Appeal -->
+    <section aria-labelledby="appeal-heading" class="card">
+      <h2 id="appeal-heading">Appeal a classification</h2>
+      <p class="muted">
+        Disagree with a result? Appeals never overwrite the original
+        classification; they move the content to <code>under_review</code>.
+      </p>
+      <form id="appeal-form">
+        <div class="field">
+          <label for="appeal-content-id">Content ID</label>
+          <input id="appeal-content-id" name="content_id" type="text" required />
+        </div>
+        <div class="field">
+          <label for="appeal-creator-id">Creator ID</label>
+          <input id="appeal-creator-id" name="creator_id" type="text"
+                 value="creator-123" required />
+        </div>
+        <div class="field">
+          <label for="appeal-reasoning">Reasoning (at least 20 characters)</label>
+          <textarea id="appeal-reasoning" name="creator_reasoning" rows="3"
+            required placeholder="I wrote this from my own experience..."></textarea>
+        </div>
+        <button type="submit">Submit appeal</button>
+      </form>
+      <div id="appeal-status" class="status" role="status" aria-live="polite"></div>
+    </section>
+
+    <!-- Image metadata -->
+    <section aria-labelledby="image-heading" class="card">
+      <h2 id="image-heading">Submit image metadata</h2>
+      <p class="muted">
+        This pipeline analyzes structured metadata, not the visual pixels.
+      </p>
+      <form id="image-form">
+        <div class="field">
+          <label for="image-creator-id">Creator ID</label>
+          <input id="image-creator-id" name="creator_id" type="text"
+                 value="creator-123" required />
+        </div>
+        <div class="field">
+          <label for="image-metadata">Metadata (JSON)</label>
+          <textarea id="image-metadata" name="metadata" rows="10" required>{
+  "filename": "artwork.png",
+  "mime_type": "image/png",
+  "width": 1024,
+  "height": 1024,
+  "software": "Midjourney",
+  "has_exif": false,
+  "edit_count": 0,
+  "source_hash": "",
+  "creator_attestation": false,
+  "alt_text": "A surreal city floating above the clouds."
+}</textarea>
+        </div>
+        <button type="submit">Analyze metadata</button>
+      </form>
+      <div id="image-status" class="status" role="status" aria-live="polite"></div>
+      <div id="image-result" class="result" hidden></div>
+    </section>
+
+    <!-- Certificate -->
+    <section aria-labelledby="cert-heading" class="card">
+      <h2 id="cert-heading">Provenance certificate</h2>
+      <p class="muted">
+        A creator-controlled process check. It verifies a time-limited
+        authorship challenge and draft evidence — it does not mathematically
+        prove human authorship.
+      </p>
+      <form id="challenge-form">
+        <div class="field">
+          <label for="cert-content-id">Content ID</label>
+          <input id="cert-content-id" name="content_id" type="text" required />
+        </div>
+        <div class="field">
+          <label for="cert-creator-id">Creator ID</label>
+          <input id="cert-creator-id" name="creator_id" type="text"
+                 value="creator-123" required />
+        </div>
+        <button type="submit">Request challenge</button>
+      </form>
+      <div id="challenge-status" class="status" role="status" aria-live="polite"></div>
+
+      <form id="verify-form" hidden>
+        <div class="field">
+          <label for="verify-response">Process note (must include the phrase,
+            50+ words)</label>
+          <textarea id="verify-response" name="challenge_response" rows="4"
+            required></textarea>
+        </div>
+        <div class="field">
+          <label for="verify-evidence">Draft evidence (one per line, 2+)</label>
+          <textarea id="verify-evidence" name="draft_evidence" rows="3" required
+            placeholder="draft-v1-notes&#10;draft-v2-outline"></textarea>
+        </div>
+        <div class="field field-checkbox">
+          <input id="verify-attest" name="creator_attestation" type="checkbox" />
+          <label for="verify-attest">I attest that I created this work.</label>
+        </div>
+        <button type="submit">Verify and issue certificate</button>
+      </form>
+      <div id="verify-status" class="status" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p class="muted">
+      Provenance Guard is a portfolio project. Results are estimates and must not
+      be treated as proof of authorship.
+    </p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
