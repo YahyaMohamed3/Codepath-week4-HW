@@ -1,22 +1,26 @@
 {
-  "groq_configured": false,
+  "groq_configured": true,
   "submissions": {
     "ai_like": {
-      "ai_likelihood": 0.5716,
+      "ai_likelihood": 0.6858,
       "attribution": "uncertain",
       "certificate": null,
-      "confidence": 0.5,
-      "content_id": "d24324cd-a282-444d-8bc9-10c72bb66884",
+      "confidence": 0.543,
+      "content_id": "19194d31-6ee9-4ad2-8957-1fdaa6125772",
       "content_type": "text",
-      "created_at": "2026-07-01T03:27:26.651Z",
+      "created_at": "2026-07-01T03:36:00.398Z",
       "creator_id": "demo-creator",
       "signal_disagreement": 0.714,
       "signals": {
         "llm_semantic": {
-          "available": false,
-          "indicators": [],
-          "reasoning": "Groq API key not configured.",
-          "score": null
+          "available": true,
+          "indicators": [
+            "formulaic explanatory language",
+            "generic qualification",
+            "consistent but unnatural tone"
+          ],
+          "reasoning": "The passage exhibits overly formal and balanced language, with repetitive transitional phrases, suggesting a potential lack of human nuance.",
+          "score": 0.8
         },
         "phrase_pattern": {
           "available": true,
@@ -57,21 +61,24 @@
       }
     },
     "human_like": {
-      "ai_likelihood": 0.1162,
+      "ai_likelihood": 0.1581,
       "attribution": "likely_human",
       "certificate": null,
-      "confidence": 0.8451,
-      "content_id": "0ad9b793-c688-474f-b4d7-9209b7a8602f",
+      "confidence": 0.8019,
+      "content_id": "233f7858-085a-4c60-bd8c-61b7594a54f8",
       "content_type": "text",
-      "created_at": "2026-07-01T03:27:26.656Z",
+      "created_at": "2026-07-01T03:36:00.707Z",
       "creator_id": "demo-creator",
-      "signal_disagreement": 0.1936,
+      "signal_disagreement": 0.2,
       "signals": {
         "llm_semantic": {
-          "available": false,
-          "indicators": [],
-          "reasoning": "Groq API key not configured.",
-          "score": null
+          "available": true,
+          "indicators": [
+            "distinctive, personal narrative voice",
+            "vivid, specific sensory details"
+          ],
+          "reasoning": "The passage exhibits a personal and descriptive tone, with vivid imagery and a narrative voice that suggests human experience and emotion.",
+          "score": 0.2
         },
         "phrase_pattern": {
           "available": true,
@@ -100,21 +107,24 @@
       }
     },
     "borderline": {
-      "ai_likelihood": 0.0449,
-      "attribution": "likely_human",
+      "ai_likelihood": 0.3724,
+      "attribution": "uncertain",
       "certificate": null,
-      "confidence": 0.9402,
-      "content_id": "0794ddc0-f522-49a6-bb70-5554c8fd1c1f",
+      "confidence": 0.5,
+      "content_id": "905f0cb8-b606-4cca-88d5-d567582c13f0",
       "content_type": "text",
-      "created_at": "2026-07-01T03:27:26.660Z",
+      "created_at": "2026-07-01T03:36:01.095Z",
       "creator_id": "demo-creator",
-      "signal_disagreement": 0.0748,
+      "signal_disagreement": 0.7,
       "signals": {
         "llm_semantic": {
-          "available": false,
-          "indicators": [],
-          "reasoning": "Groq API key not configured.",
-          "score": null
+          "available": true,
+          "indicators": [
+            "generic qualification phrases",
+            "formulaic explanatory language"
+          ],
+          "reasoning": "The passage exhibits overly generic and formulaic language, suggesting potential AI generation. The balanced exposition and lack of distinctive tone also contribute to this assessment.",
+          "score": 0.7
         },
         "phrase_pattern": {
           "available": true,
@@ -138,28 +148,28 @@
       },
       "status": "classified",
       "transparency_label": {
-        "text": "Likely human-written. The available signals found more human-like variation than AI-like patterns. This is an estimate, not a guarantee of authorship.",
-        "variant": "high_confidence_human"
+        "text": "Origin uncertain. The signals did not agree strongly enough to determine whether this content was written by a person or generated with AI.",
+        "variant": "uncertain"
       }
     }
   },
   "appeal": {
-    "appeal_id": "4cb4cf89-06bf-4bac-b945-6243b6322b21",
-    "content_id": "0794ddc0-f522-49a6-bb70-5554c8fd1c1f",
+    "appeal_id": "fe1bcf17-ccb0-49e2-b4b0-66f10f08366f",
+    "content_id": "905f0cb8-b606-4cca-88d5-d567582c13f0",
     "creator_reasoning": "I wrote this summary myself from my own research notes and can provide the earlier drafts on request.",
     "duplicate": false,
     "message": "Your appeal was received and the content is now under review.",
     "status": "under_review",
-    "submitted_at": "2026-07-01T03:27:26.666Z"
+    "submitted_at": "2026-07-01T03:36:01.105Z"
   },
   "image_metadata": {
     "ai_likelihood": 0.75,
     "attribution": "uncertain",
     "certificate": null,
     "confidence": 0.67,
-    "content_id": "02cb87e1-323d-4018-a2e2-64e8dbb11672",
+    "content_id": "985bdb97-59af-4dca-a33b-1e629bbd6308",
     "content_type": "image_metadata",
-    "created_at": "2026-07-01T03:27:26.672Z",
+    "created_at": "2026-07-01T03:36:01.120Z",
     "creator_id": "demo-creator",
     "signal_disagreement": 0.4,
     "signals": {
@@ -192,18 +202,18 @@
   },
   "certificate": {
     "challenge": {
-      "challenge_id": "323fc1eb-6467-4bb0-b835-6f38f3a20180",
-      "content_id": "0ad9b793-c688-474f-b4d7-9209b7a8602f",
-      "expires_at": "2026-07-01T03:37:26.677Z",
+      "challenge_id": "dd13d05d-0ce5-442d-a937-1ab21e5bf7b4",
+      "content_id": "233f7858-085a-4c60-bd8c-61b7594a54f8",
+      "expires_at": "2026-07-01T03:46:01.131Z",
       "instructions": "Within 10 minutes, submit a process note of at least 50 words that includes the exact phrase above, set creator_attestation to true, and provide at least 2 draft-evidence entries.",
-      "phrase": "lantern-marble-cobalt"
+      "phrase": "ember-juniper-beacon"
     },
     "verification": {
-      "certificate_id": "7a5d060f-816b-4063-b7ff-92f9f0cf3877",
+      "certificate_id": "a15fe859-6bc7-45aa-b790-415b975709b4",
       "certificate_label": "Verified Human Process. The creator completed a time-limited authorship challenge and supplied draft-process evidence for this submission. This verification is separate from the automated attribution estimate.",
-      "content_id": "0ad9b793-c688-474f-b4d7-9209b7a8602f",
+      "content_id": "233f7858-085a-4c60-bd8c-61b7594a54f8",
       "evidence_summary": "draft-v1-notes.txt; draft-v2-outline.txt",
-      "issued_at": "2026-07-01T03:27:26.683Z",
+      "issued_at": "2026-07-01T03:36:01.145Z",
       "message": "Certificate issued. Verified human-process evidence recorded.",
       "status": "verified"
     }
@@ -211,51 +221,51 @@
   "analytics": {
     "appeal_count": 1,
     "appeal_rate": 0.25,
-    "average_confidence": 0.7388,
-    "average_signal_disagreement": 0.3456,
+    "average_confidence": 0.6287,
+    "average_signal_disagreement": 0.5035,
     "certificate_count": 1,
     "image_metadata_submissions": 1,
     "likely_ai_count": 0,
     "likely_ai_ratio": 0.0,
-    "likely_human_count": 2,
-    "likely_human_ratio": 0.5,
+    "likely_human_count": 1,
+    "likely_human_ratio": 0.25,
     "text_submissions": 3,
     "total_submissions": 4,
-    "uncertain_count": 2,
-    "uncertain_ratio": 0.5,
+    "uncertain_count": 3,
+    "uncertain_ratio": 0.75,
     "under_review_count": 1
   },
   "audit_log": {
     "count": 6,
     "events": [
       {
-        "ai_likelihood": 0.1162,
+        "ai_likelihood": 0.1581,
         "attribution": "likely_human",
-        "confidence": 0.8451,
+        "confidence": 0.8019,
         "content_hash": "aa72915415e9b054658026bfcbade8f8934991a0760bc37884849df2d746dfe4",
-        "content_id": "0ad9b793-c688-474f-b4d7-9209b7a8602f",
+        "content_id": "233f7858-085a-4c60-bd8c-61b7594a54f8",
         "content_type": "text",
         "creator_id": "demo-creator",
         "details": {
-          "certificate_id": "7a5d060f-816b-4063-b7ff-92f9f0cf3877",
-          "challenge_id": "323fc1eb-6467-4bb0-b835-6f38f3a20180",
+          "certificate_id": "a15fe859-6bc7-45aa-b790-415b975709b4",
+          "challenge_id": "dd13d05d-0ce5-442d-a937-1ab21e5bf7b4",
           "evidence_count": 2,
           "evidence_summary": "draft-v1-notes.txt; draft-v2-outline.txt",
           "response_word_count": 69
         },
-        "event_id": "8f911437-88c1-487f-a270-f17062c0663e",
+        "event_id": "beae64b7-19cf-4abe-b570-8c0381a5cacb",
         "event_type": "certificate",
         "preview": "My grandmother kept bees behind the shed, and every August the whole yard smelled of smoke and clover. She never wore t\u2026",
         "signals": null,
         "status": "verified",
-        "timestamp": "2026-07-01T03:27:26.683Z"
+        "timestamp": "2026-07-01T03:36:01.147Z"
       },
       {
         "ai_likelihood": 0.75,
         "attribution": "uncertain",
         "confidence": 0.67,
         "content_hash": "93faa44112dd117be5f02ccf06aca4672d3cbbb83c4803347a9556bb31e61902",
-        "content_id": "02cb87e1-323d-4018-a2e2-64e8dbb11672",
+        "content_id": "985bdb97-59af-4dca-a33b-1e629bbd6308",
         "content_type": "image_metadata",
         "creator_id": "demo-creator",
         "details": {
@@ -264,7 +274,7 @@
           "signal_disagreement": 0.4,
           "word_count": 0
         },
-        "event_id": "2580618e-5d6b-43e1-b596-bba41a190dfe",
+        "event_id": "87bd0707-0281-43f2-9f04-b2273c2a7856",
         "event_type": "image_classification",
         "preview": "artwork.png",
         "signals": {
@@ -273,86 +283,86 @@
           "provenance_history": 0.55
         },
         "status": "classified",
-        "timestamp": "2026-07-01T03:27:26.673Z"
+        "timestamp": "2026-07-01T03:36:01.123Z"
       },
       {
-        "ai_likelihood": 0.0449,
-        "attribution": "likely_human",
-        "confidence": 0.9402,
+        "ai_likelihood": 0.3724,
+        "attribution": "uncertain",
+        "confidence": 0.5,
         "content_hash": "e9dd3e12dda8633656eb4e7cef9f9408dbdd88a6d58c3742b1421188cbe6132f",
-        "content_id": "0794ddc0-f522-49a6-bb70-5554c8fd1c1f",
+        "content_id": "905f0cb8-b606-4cca-88d5-d567582c13f0",
         "content_type": "text",
         "creator_id": "demo-creator",
         "details": {
           "creator_reasoning": "I wrote this summary myself from my own research notes and can provide the earlier drafts on request.",
           "new_status": "under_review",
-          "original_ai_likelihood": 0.0449,
-          "original_attribution": "likely_human",
-          "original_confidence": 0.9402
+          "original_ai_likelihood": 0.3724,
+          "original_attribution": "uncertain",
+          "original_confidence": 0.5
         },
-        "event_id": "4624a640-a9f7-4a33-b4b9-ecf2381d8a50",
+        "event_id": "d1b930ed-9639-48c5-b27c-1e117eb129fd",
         "event_type": "appeal",
         "preview": "The report outlines several findings. Data collection occurred over three months. Participants were selected at random \u2026",
         "signals": null,
         "status": "under_review",
-        "timestamp": "2026-07-01T03:27:26.667Z"
+        "timestamp": "2026-07-01T03:36:01.107Z"
       },
       {
-        "ai_likelihood": 0.0449,
-        "attribution": "likely_human",
-        "confidence": 0.9402,
+        "ai_likelihood": 0.3724,
+        "attribution": "uncertain",
+        "confidence": 0.5,
         "content_hash": "e9dd3e12dda8633656eb4e7cef9f9408dbdd88a6d58c3742b1421188cbe6132f",
-        "content_id": "0794ddc0-f522-49a6-bb70-5554c8fd1c1f",
+        "content_id": "905f0cb8-b606-4cca-88d5-d567582c13f0",
         "content_type": "text",
         "creator_id": "demo-creator",
         "details": {
           "char_count": 292,
-          "label_variant": "high_confidence_human",
-          "signal_disagreement": 0.0748,
+          "label_variant": "uncertain",
+          "signal_disagreement": 0.7,
           "word_count": 42
         },
-        "event_id": "01b75c7b-0858-485a-8f0a-41cd2b842a6c",
+        "event_id": "4f82c11f-4c01-40df-9308-ed99890874a9",
         "event_type": "classification",
         "preview": "The report outlines several findings. Data collection occurred over three months. Participants were selected at random \u2026",
         "signals": {
-          "llm_semantic": null,
+          "llm_semantic": 0.7,
           "phrase_pattern": 0.0,
           "stylometric": 0.0748
         },
         "status": "classified",
-        "timestamp": "2026-07-01T03:27:26.661Z"
+        "timestamp": "2026-07-01T03:36:01.097Z"
       },
       {
-        "ai_likelihood": 0.1162,
+        "ai_likelihood": 0.1581,
         "attribution": "likely_human",
-        "confidence": 0.8451,
+        "confidence": 0.8019,
         "content_hash": "aa72915415e9b054658026bfcbade8f8934991a0760bc37884849df2d746dfe4",
-        "content_id": "0ad9b793-c688-474f-b4d7-9209b7a8602f",
+        "content_id": "233f7858-085a-4c60-bd8c-61b7594a54f8",
         "content_type": "text",
         "creator_id": "demo-creator",
         "details": {
           "char_count": 371,
           "label_variant": "high_confidence_human",
-          "signal_disagreement": 0.1936,
+          "signal_disagreement": 0.2,
           "word_count": 70
         },
-        "event_id": "d08c9be5-5abd-4c6e-aa0d-1c0c025bfb41",
+        "event_id": "dc70eede-861b-4b37-91f8-083245c19607",
         "event_type": "classification",
         "preview": "My grandmother kept bees behind the shed, and every August the whole yard smelled of smoke and clover. She never wore t\u2026",
         "signals": {
-          "llm_semantic": null,
+          "llm_semantic": 0.2,
           "phrase_pattern": 0.0,
           "stylometric": 0.1936
         },
         "status": "classified",
-        "timestamp": "2026-07-01T03:27:26.656Z"
+        "timestamp": "2026-07-01T03:36:00.708Z"
       },
       {
-        "ai_likelihood": 0.5716,
+        "ai_likelihood": 0.6858,
         "attribution": "uncertain",
-        "confidence": 0.5,
+        "confidence": 0.543,
         "content_hash": "30442185d84bd41ca64ab6b7bfdb588e5624373d5d1e8f0084c1854e612ff15b",
-        "content_id": "d24324cd-a282-444d-8bc9-10c72bb66884",
+        "content_id": "19194d31-6ee9-4ad2-8957-1fdaa6125772",
         "content_type": "text",
         "creator_id": "demo-creator",
         "details": {
@@ -361,16 +371,16 @@
           "signal_disagreement": 0.714,
           "word_count": 63
         },
-        "event_id": "92082356-7e9d-4e36-b9d5-612fd779bb2b",
+        "event_id": "9bcfcbd9-31f6-40c1-a67c-99f8cc84ab34",
         "event_type": "classification",
         "preview": "It is important to note that artificial intelligence plays a crucial role in modern society. Furthermore, this multifac\u2026",
         "signals": {
-          "llm_semantic": null,
+          "llm_semantic": 0.8,
           "phrase_pattern": 1.0,
           "stylometric": 0.286
         },
         "status": "classified",
-        "timestamp": "2026-07-01T03:27:26.652Z"
+        "timestamp": "2026-07-01T03:36:00.400Z"
       }
     ]
   }

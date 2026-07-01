@@ -217,10 +217,10 @@ confidence          = clamp(base_certainty - disagreement_penalty, 0.50, 0.99)
 - **Short text (< 40 words).** Forced to `uncertain`, confidence capped at
   `0.60`, with the short-sample suffix added to the label.
 
-### Real example submissions (from `scripts/run_demo.py`, no Groq key set)
+### Real example submissions (from `scripts/run_demo.py`, live Groq key set)
 
-These are actual outputs. With no `GROQ_API_KEY`, `llm_semantic` is
-`unavailable` and the two local signals carry the ensemble.
+These are actual outputs from a live run with `GROQ_API_KEY` configured, so
+`llm_semantic` carries a real Groq score.
 
 **Higher-confidence example — human-like passage → `likely_human`**
 > *"My grandmother kept bees behind the shed, and every August the whole yard
@@ -228,12 +228,14 @@ These are actual outputs. With no `GROQ_API_KEY`, `llm_semantic` is
 
 | Signal | Score |
 | --- | --- |
-| llm_semantic | unavailable |
+| llm_semantic | 0.20 |
 | stylometric | 0.1936 |
 | phrase_pattern | 0.0 |
 
-- AI likelihood: **0.1162** · Confidence: **0.8451** · Disagreement: 0.1936
+- AI likelihood: **0.1581** · Confidence: **0.8019** · Disagreement: 0.20
 - Attribution: **likely_human**
+- Groq reasoning: *"The passage exhibits overly formal and balanced language…"*
+  (the LLM leans slightly AI, but all three signals stay low overall)
 - Label: *"Likely human-written. The available signals found more human-like
   variation than AI-like patterns. This is an estimate, not a guarantee of
   authorship."*
@@ -244,21 +246,23 @@ These are actual outputs. With no `GROQ_API_KEY`, `llm_semantic` is
 
 | Signal | Score |
 | --- | --- |
-| llm_semantic | unavailable |
+| llm_semantic | 0.80 |
 | stylometric | 0.286 |
 | phrase_pattern | 1.0 |
 
-- AI likelihood: **0.5716** · Confidence: **0.50** · Disagreement: **0.714**
+- AI likelihood: **0.6858** · Confidence: **0.543** · Disagreement: **0.714**
 - Attribution: **uncertain**
-- Label: *"Origin uncertain. The signals did not agree strongly enough to
-  determine whether this content was written by a person or generated with AI."*
+- Groq reasoning: *"The passage exhibits overly generic language and formulaic
+  transitional phrases, which are common in AI-generated content."*
 
-This second example is exactly the intended behavior: the phrase signal screams
-"AI" (1.0) but the stylometric signal disagrees (0.286), so the large
-disagreement (0.714) drives a full `-0.15` confidence penalty and the system
-honestly says **uncertain** rather than risk a false accusation. Add a real
-`GROQ_API_KEY` (see below) to bring the semantic signal online and reproduce a
-corroborated `likely_ai` result.
+This second example is exactly the intended behavior. Both the Groq signal
+(0.80) and the phrase signal (1.0) point to AI, but the stylometric signal
+genuinely disagrees (0.286, because the sentences vary in length). The large
+disagreement (0.714) applies a full `-0.15` confidence penalty, and the ensemble
+`raw` of 0.6858 falls short of the `0.80` `likely_ai` gate — so the system
+honestly reports **uncertain** rather than risk a false accusation. This is the
+conservatism working: even with two of three signals shouting "AI", one credible
+dissenting signal is enough to withhold a confident verdict.
 
 ## Transparency labels
 
@@ -288,11 +292,11 @@ Short-sample suffix (appended when a sample is too short):
 Actual appeal response (from the demo):
 ```json
 {
-  "appeal_id": "4cb4cf89-06bf-4bac-b945-6243b6322b21",
-  "content_id": "0794ddc0-f522-49a6-bb70-5554c8fd1c1f",
+  "appeal_id": "fe1bcf17-ccb0-49e2-b4b0-66f10f08366f",
+  "content_id": "905f0cb8-b606-4cca-88d5-d567582c13f0",
   "status": "under_review",
   "creator_reasoning": "I wrote this summary myself from my own research notes and can provide the earlier drafts on request.",
-  "submitted_at": "2026-07-01T03:27:26.666Z",
+  "submitted_at": "2026-07-01T03:36:01.105Z",
   "message": "Your appeal was received and the content is now under review."
 }
 ```
@@ -336,18 +340,19 @@ attribution, confidence, and a timestamp. Three real entries from the demo:
 
 | Time (UTC) | Type | Attribution | Confidence | Status |
 | --- | --- | --- | --- | --- |
-| 2026-07-01T03:27:26.683Z | certificate | likely_human | 0.8451 | verified |
-| 2026-07-01T03:27:26.673Z | image_classification | uncertain | 0.67 | classified |
-| 2026-07-01T03:27:26.667Z | appeal | likely_human | 0.9402 | under_review |
+| 2026-07-01T03:36:01.147Z | certificate | likely_human | 0.8019 | verified |
+| 2026-07-01T03:36:01.123Z | image_classification | uncertain | 0.67 | classified |
+| 2026-07-01T03:36:01.107Z | appeal | uncertain | 0.5 | under_review |
 
 The **appeal** event sits beside the original classification: it records the
-original attribution (`likely_human`) and confidence (`0.9402`) plus the
-creator's reasoning in its `details`:
+original attribution (`uncertain`) and confidence (`0.5`) plus the creator's
+reasoning in its `details`:
 ```json
 {
   "creator_reasoning": "I wrote this summary myself from my own research notes and can provide the earlier drafts on request.",
-  "original_attribution": "likely_human",
-  "original_confidence": 0.9402,
+  "original_attribution": "uncertain",
+  "original_ai_likelihood": 0.3724,
+  "original_confidence": 0.5,
   "new_status": "under_review"
 }
 ```
@@ -361,8 +366,8 @@ Three signals, weights `0.50 / 0.30 / 0.20`. **When the LLM disagrees with the
 local signals**, two things protect the creator: (1) the disagreement penalty
 subtracts up to `0.15` from confidence, and (2) the corroboration gate means a
 high LLM score alone cannot produce `likely_ai` — at least one local signal must
-also be `>= 0.60`. The uncertain example above (LLM path offline, phrase 1.0 vs
-stylometric 0.29) demonstrates the penalty in action. Tests
+also be `>= 0.60`. The uncertain example above (Groq 0.80 and phrase 1.0 both
+say AI, but stylometric 0.29 dissents) demonstrates the penalty in action. Tests
 `test_strong_ai_agreement_*`, `test_conflicting_signals_*`,
 `test_ai_gate_requires_non_llm_corroboration`, and
 `test_disagreement_penalty_capped_at_015` cover this.
@@ -384,12 +389,12 @@ stylometric 0.29) demonstrates the penalty in action. Tests
 Actual verification response (from the demo):
 ```json
 {
-  "certificate_id": "7a5d060f-816b-4063-b7ff-92f9f0cf3877",
-  "content_id": "0ad9b793-c688-474f-b4d7-9209b7a8602f",
+  "certificate_id": "a15fe859-6bc7-45aa-b790-415b975709b4",
+  "content_id": "233f7858-085a-4c60-bd8c-61b7594a54f8",
   "status": "verified",
   "evidence_summary": "draft-v1-notes.txt; draft-v2-outline.txt",
   "certificate_label": "Verified Human Process. The creator completed a time-limited authorship challenge and supplied draft-process evidence for this submission. This verification is separate from the automated attribution estimate.",
-  "issued_at": "2026-07-01T03:27:26.683Z"
+  "issued_at": "2026-07-01T03:36:01.145Z"
 }
 ```
 
@@ -408,11 +413,11 @@ Actual `/analytics` output from the demo:
   "text_submissions": 3,
   "image_metadata_submissions": 1,
   "likely_ai_count": 0, "likely_ai_ratio": 0.0,
-  "likely_human_count": 2, "likely_human_ratio": 0.5,
-  "uncertain_count": 2, "uncertain_ratio": 0.5,
+  "likely_human_count": 1, "likely_human_ratio": 0.25,
+  "uncertain_count": 3, "uncertain_ratio": 0.75,
   "appeal_count": 1, "appeal_rate": 0.25,
-  "average_confidence": 0.7388,
-  "average_signal_disagreement": 0.3456,
+  "average_confidence": 0.6287,
+  "average_signal_disagreement": 0.5035,
   "certificate_count": 1,
   "under_review_count": 1
 }
@@ -550,13 +555,14 @@ python scripts/run_demo.py --reset    # end-to-end demo + writes docs/demo_evide
 python scripts/rate_limit_demo.py     # deterministic 10-then-429 demonstration
 ```
 
-> **Live Groq evidence:** the automated tests and demo run without a key by
-> design (the Groq signal reports `available: false`). To produce **live** Groq
-> semantic scores, add your real key to `.env` and run:
+> **Live Groq evidence:** the automated tests always run without a key by design
+> (the injected fake detector keeps them deterministic and free). The evidence
+> shown in this README and in `docs/demo_evidence.json` was produced by a **live**
+> run with a real `GROQ_API_KEY`. To regenerate it yourself, set your key in
+> `.env` and run:
 > ```bash
 > python scripts/run_demo.py --reset
 > ```
-> This is the single command to run after adding your key.
 
 ## Security and privacy notes
 
