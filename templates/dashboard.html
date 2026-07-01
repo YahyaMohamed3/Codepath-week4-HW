@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Provenance Guard — Analytics</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <h1>Analytics dashboard</h1>
+      <nav aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/log">Audit log (JSON)</a>
+        <a href="/analytics">Analytics (JSON)</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>Overview</h2>
+      <div class="metric-grid">
+        <div class="metric">
+          <span class="metric-value">{{ stats.total_submissions }}</span>
+          <span class="metric-label">Total submissions</span>
+        </div>
+        <div class="metric">
+          <span class="metric-value">{{ stats.text_submissions }}</span>
+          <span class="metric-label">Text</span>
+        </div>
+        <div class="metric">
+          <span class="metric-value">{{ stats.image_metadata_submissions }}</span>
+          <span class="metric-label">Image metadata</span>
+        </div>
+        <div class="metric">
+          <span class="metric-value">{{ stats.certificate_count }}</span>
+          <span class="metric-label">Certificates issued</span>
+        </div>
+        <div class="metric">
+          <span class="metric-value">{{ stats.under_review_count }}</span>
+          <span class="metric-label">Under review</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Attribution distribution</h2>
+      {% set ai_pct = (stats.likely_ai_ratio * 100) | round(1) %}
+      {% set human_pct = (stats.likely_human_ratio * 100) | round(1) %}
+      {% set unc_pct = (stats.uncertain_ratio * 100) | round(1) %}
+      <div class="bar-row">
+        <span class="bar-label">Likely AI ({{ stats.likely_ai_count }})</span>
+        <div class="bar-track"><div class="bar-fill bar-ai"
+          style="width: {{ ai_pct }}%"></div></div>
+        <span class="bar-pct">{{ ai_pct }}%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Likely human ({{ stats.likely_human_count }})</span>
+        <div class="bar-track"><div class="bar-fill bar-human"
+          style="width: {{ human_pct }}%"></div></div>
+        <span class="bar-pct">{{ human_pct }}%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Uncertain ({{ stats.uncertain_count }})</span>
+        <div class="bar-track"><div class="bar-fill bar-uncertain"
+          style="width: {{ unc_pct }}%"></div></div>
+        <span class="bar-pct">{{ unc_pct }}%</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Key rates</h2>
+      {% set appeal_pct = (stats.appeal_rate * 100) | round(1) %}
+      {% set conf_pct = (stats.average_confidence * 100) | round(1) %}
+      {% set dis_pct = (stats.average_signal_disagreement * 100) | round(1) %}
+      <div class="bar-row">
+        <span class="bar-label">Appeal rate</span>
+        <div class="bar-track"><div class="bar-fill bar-appeal"
+          style="width: {{ appeal_pct }}%"></div></div>
+        <span class="bar-pct">{{ appeal_pct }}% ({{ stats.appeal_count }} appeals)</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Average confidence</span>
+        <div class="bar-track"><div class="bar-fill bar-conf"
+          style="width: {{ conf_pct }}%"></div></div>
+        <span class="bar-pct">{{ conf_pct }}%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Avg signal disagreement</span>
+        <div class="bar-track"><div class="bar-fill bar-dis"
+          style="width: {{ dis_pct }}%"></div></div>
+        <span class="bar-pct">{{ dis_pct }}%</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Recent audit events</h2>
+      {% if recent %}
+      <table class="audit-table">
+        <thead>
+          <tr>
+            <th scope="col">Time (UTC)</th>
+            <th scope="col">Type</th>
+            <th scope="col">Attribution</th>
+            <th scope="col">Confidence</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in recent %}
+          <tr>
+            <td>{{ e.timestamp }}</td>
+            <td>{{ e.event_type }}</td>
+            <td>{{ e.attribution or "—" }}</td>
+            <td>{{ "%.2f"|format(e.confidence) if e.confidence is not none else "—" }}</td>
+            <td>{{ e.status or "—" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="muted">No audit events yet. Submit some content to populate this.</p>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>
